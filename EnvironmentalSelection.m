@@ -41,7 +41,7 @@ function [Population,FrontNo,ranks] = EnvironmentalSelection(OffSpring,W,N)
          end
     end
     
-    [FrontNo,MaxFNo] = SPDSort(PopObj,ranks,B,d3,RP,N);
+    [FrontNo,MaxFNo] = RPVSort(PopObj,ranks,B,d3,RP,N);
     Next = FrontNo < MaxFNo;
     Last     = find(FrontNo==MaxFNo);
     [~,Rank] = sort(d2(Last));
