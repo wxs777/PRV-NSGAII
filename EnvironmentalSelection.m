@@ -21,7 +21,7 @@ function [Population,FrontNo,ranks] = EnvironmentalSelection(OffSpring,W,N)
              ranks(i,j)=find(index==i);
         end
     end
-    ranks=sum(ranks,2);%非支配解中所有维度平均值排名之和 
+    ranks=sum(ranks,2);
     %% Association
     normP   = sqrt(sum(PopObj.^2,2));
     Cosine  = 1 - pdist2(PopObj,W,'cosine');
@@ -31,7 +31,6 @@ function [Population,FrontNo,ranks] = EnvironmentalSelection(OffSpring,W,N)
     [d2,RP] = min(d2,[],2);
     d1      = d1((1:length(RP))'+(RP-1)*length(RP));
     
-    %% Favor extreme solutions
     ND              = find(NDSort(PopObj,1)==1);
     [~,Extreme]     = max(PopObj(ND,:),[],1);
     d1(ND(Extreme)) = 0;
@@ -51,11 +50,9 @@ function [Population,FrontNo,ranks] = EnvironmentalSelection(OffSpring,W,N)
     Next = FrontNo < MaxFNo;
     %% Select the solutions in the last front
     
-%         Del = Truncation(OffSpring(Next).objs,sum(Next)-N);
-%         Temp = find(Next);
+
         Last     = find(FrontNo==MaxFNo);
         [~,Rank] = sort(d2(Last));
-%         Next(Temp(Del)) = false;
         Next(Last(Rank(1:N-sum(Next)))) = true;
 
     
