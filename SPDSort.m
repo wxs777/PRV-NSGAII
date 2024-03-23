@@ -1,4 +1,4 @@
-function [FrontNo,MaxFNo] = SPDSort(PopObj,d1,d2,d3,RP,nSort)
+function [FrontNo,MaxFNo] = RPVSort(PopObj,d1,d2,d3,RP,nSort)
      Density=histc(RP,1:nSort);
      aveDensity = sum(Density)/length(Density);
     [N,M]   = size(PopObj);
