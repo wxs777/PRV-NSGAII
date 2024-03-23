@@ -7,14 +7,12 @@ function [Population,FrontNo,ranks] = EnvironmentalSelection(OffSpring,W,N)
         B = B(:,1:ceil(N*0.01));
     end
     
-    %% Normalization
     PopObj = OffSpring.objs;
     PopObj1 = OffSpring.objs;
     Fmin   = min(PopObj,[],1);
     Fmax   = max(PopObj,[],1);
     PopObj = (PopObj-repmat(Fmin,size(PopObj,1),1))./repmat(Fmax-Fmin,size(PopObj,1),1);
     [~,M] = size(PopObj);
-    %% Association
    for i = 1 : size(PopObj1,1)
         for j = 1 : size(PopObj1,2)
              [tempranks,index]=sort(PopObj1(:,j));
@@ -22,7 +20,6 @@ function [Population,FrontNo,ranks] = EnvironmentalSelection(OffSpring,W,N)
         end
     end
     ranks=sum(ranks,2);
-    %% Association
     normP   = sqrt(sum(PopObj.^2,2));
     Cosine  = 1 - pdist2(PopObj,W,'cosine');
     d1      = repmat(normP,1,size(W,1)).*Cosine;
@@ -35,9 +32,7 @@ function [Population,FrontNo,ranks] = EnvironmentalSelection(OffSpring,W,N)
     [~,Extreme]     = max(PopObj(ND,:),[],1);
     d1(ND(Extreme)) = 0;
     d2(ND(Extreme)) = 0;
-    d3(ND(Extreme)) = 3;
     ranks(ND(Extreme)) = 0;
-    %% SPDsorting
     for i = 1 : size(W,1)
         tempobj = PopObj(find(RP == i),:);
          [~,rank]=sort(tempobj,1);
@@ -48,30 +43,13 @@ function [Population,FrontNo,ranks] = EnvironmentalSelection(OffSpring,W,N)
     
     [FrontNo,MaxFNo] = SPDSort(PopObj,ranks,B,d3,RP,N);
     Next = FrontNo < MaxFNo;
-    %% Select the solutions in the last front
-    
-
-        Last     = find(FrontNo==MaxFNo);
-        [~,Rank] = sort(d2(Last));
-        Next(Last(Rank(1:N-sum(Next)))) = true;
+    Last     = find(FrontNo==MaxFNo);
+    [~,Rank] = sort(d2(Last));
+    Next(Last(Rank(1:N-sum(Next)))) = true;
 
     
     %% Population for next generation
     Population = OffSpring(Next);
     FrontNo    = FrontNo(Next);
     ranks      = ranks(Next);
-end
-function Del = Truncation(PopObj,K)
-% Select part of the solutions by truncation
-
-    %% Truncation
-    Distance = pdist2(PopObj,PopObj);
-    Distance(logical(eye(length(Distance)))) = inf;
-    Del = false(1,size(PopObj,1));
-    while sum(Del) < K
-        Remain   = find(~Del);
-        Temp     = sort(Distance(Remain,Remain),2);
-        [~,Rank] = sortrows(Temp);
-        Del(Remain(Rank(1))) = true;
-    end
 end
