@@ -37,7 +37,7 @@ function [FrontNo,MaxFNo] = RPVSort(PopObj,d1,d2,d3,RP,nSort)
                             	domi = -1;
                             end
                         elseif domi == 0 && RP(i)~=RP(j)
-                            if d1(i) < d1(j) &&  Density(RP(i)) <  Density(RP(j)) && Density(RP(i)) > aveDensity && Density(RP(j)) > aveDensity && ismember(RP(j),d2(RP(i),:)) && ismember(RP(i),d2(RP(j),:))
+                            if d1(i) < d1(j) &&  Density(RP(i)) <  Density(RP(j)) && Density(RP(i)) > aveDensity && Density(RP(j)) > aveDensity && ismember(RP(j),d2(RP(i),:)) 
                             	domi = 1;
                             end
                         end
